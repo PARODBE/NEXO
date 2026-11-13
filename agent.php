@@ -1,0 +1,8 @@
+<?php
+require_once __DIR__.'/includes/bootstrap.php';require_once __DIR__.'/includes/layout.php';
+$id=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
+try{$agent=$id?(new BusinessRepository(db()))->findAgent($id):null;}catch(PDOException $error){error_log($error->getMessage());render_database_unavailable();}
+if(!$agent)render_not_found();render_header($agent['name'],$agent['summary']);
+?>
+<section class="agent-detail"><a class="back-link" href="<?= e(url('index.php#agentes')) ?>">← Volver al catálogo</a><div class="agent-detail-grid"><div><p class="eyebrow"><?= e(category_labels()[$agent['category']]) ?> / AGENTE ESPECIALIZADO</p><h1><?= e($agent['name']) ?></h1><p class="lede"><?= e($agent['summary']) ?></p><p><?= e($agent['purpose']) ?></p><div class="form-actions"><a class="button" href="<?= e(url('builder.php?agent='.$agent['id'])) ?>">Añadir a mi equipo ↗</a><a class="text-link" href="<?= e(url('request.php')) ?>">Consultar una propuesta ↗</a></div></div><div class="agent-detail-art"><?php agent_visual($agent['icon'],$agent['color']); ?></div></div></section><section class="detail-panels"><article class="panel"><p class="eyebrow">QUÉ SE BUSCA CONSEGUIR</p><h2>Un entregable concreto.</h2><p><?= e($agent['deliverable']) ?></p></article><article class="panel"><p class="eyebrow">DÓNDE ESTÁ EL LÍMITE</p><h2>Siempre con revisión.</h2><p><?= e($agent['limitations']) ?></p></article></section><aside class="scope-note"><strong>Catálogo de servicios propuestos.</strong> En esta demostración puedes configurar equipos y solicitar propuestas. No se ejecutan tareas de IA ni se conectan herramientas de tu empresa.</aside>
+<?php render_footer(); ?>
