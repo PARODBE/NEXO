@@ -64,26 +64,8 @@ Para probarla, crea una cuenta, elige un plan, selecciona y ordena los agentes y
 
 Cada usuario solo puede acceder a sus equipos y solicitudes. Las contraseñas se guardan como hash y las consultas SQL utilizan parámetros preparados.
 
-## Documentación y pruebas
+## Documentacion
 
-La explicación del proyecto está en [documentacion_proyecto.md](documentacion_proyecto.md). En `docs/` están el guion de presentación, la explicación de la API y los resultados de las comprobaciones.
-
-Con XAMPP iniciado, puedes ejecutar estas pruebas desde la carpeta del proyecto:
-
-```powershell
-py scripts/test_app.py
-py scripts/test_json.py
-node scripts/check_interactions.cjs
-```
-
-Las pruebas HTTP crean cuentas ficticias y eliminan sus datos al terminar. Python y Node solo se usan para estas comprobaciones; no hacen falta para abrir la web.
-
-Para generar el ZIP de entrega:
-
-```powershell
-py scripts/package_project.py
-```
-
-Se guarda en `output/PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`.
+La descripcion del proyecto, sus funcionalidades y la organizacion del codigo estan en [documentacion_proyecto.md](documentacion_proyecto.md).
 
 Repositorio: https://github.com/PARODBE/NEXO

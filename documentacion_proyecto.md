@@ -1,117 +1,110 @@
-# Documentación del proyecto: NEXO
+# NEXO: documentación del proyecto
 
-## 1. Objetivo
+**Autor:** Pablo Rodríguez Belenguer  
+**Asignatura:** Ingeniería Web I  
+**Repositorio:** https://github.com/PARODBE/NEXO
 
-NEXO es una aplicación de catálogo comercial para explorar servicios propuestos de agentes, componer un equipo para una empresa y solicitar una propuesta. Su finalidad es conectar una necesidad de negocio con una configuración concreta de especialidades.
+## Descripción
 
-El recorrido principal es: explorar el catálogo, consultar una ficha, elegir plan, seleccionar y ordenar agentes, guardar la configuración y enviar una solicitud. La cuenta permite retomar el trabajo y consultar las solicitudes presentadas.
+NEXO es una aplicación web dirigida a empresas que quieren organizar un equipo de agentes de IA según sus necesidades. La idea es que puedan conocer las especialidades disponibles, elegir un plan y combinar varios agentes para un objetivo común, como preparar una campaña o coordinar un proyecto.
 
-Es un proyecto académico de Ingeniería Web I. El catálogo, los precios y los flujos describen una propuesta de producto. No representan contratos, clientes o resultados reales. El formulario registra una solicitud de interés; no cobra ni envía comunicaciones comerciales a terceros.
+El usuario puede consultar el catálogo sin registrarse. Para guardar equipos y enviar solicitudes necesita una cuenta. Desde su espacio privado puede recuperar sus configuraciones y modificarlas más adelante.
 
-## 2. Usuarios y alcance
+El proyecto representa la parte comercial y de configuración del servicio. No ejecuta modelos de IA ni procesa pagos. Los planes y sus precios sirven para mostrar cómo se ofrecería el producto.
 
-- **Visitante:** consulta catálogo, fichas y planes; puede registrarse para preparar un equipo.
-- **Cuenta de empresa:** guarda, edita y elimina sus configuraciones y envía solicitudes asociadas a su cuenta.
-- **Titular de la configuración:** decide qué especialidades incluye y su orden; no puede modificar configuraciones de otra cuenta.
+## Funcionalidades
 
-El diseño prioriza catálogo, configuración y conversión a solicitud. Las identidades gráficas son formas geométricas HTML/CSS. No se atribuyen testimonios, marcas o métricas de éxito a empresas reales.
+### Catálogo de agentes
 
-## 3. Funcionalidades
+El catálogo contiene seis especialidades: análisis de negocio, estrategia de campañas, redacción, asistencia comercial, coordinación de proyectos y soporte. Cada ficha explica para qué serviría el agente, qué información necesita y qué entregaría.
 
-1. Registro, inicio y cierre de sesión.
-2. Catálogo almacenado en MySQL con búsqueda y categorías.
-3. Fichas con propósito, necesidades de entrada, entregables y casos de uso propuestos.
-4. Presentación de planes Básico, Business y Enterprise con precios orientativos de 49, 149 y propuesta personalizada respectivamente, según el catálogo de la interfaz.
-5. Configurador con selección y orden de agentes; límites por plan: Básico hasta 3, Business hasta 10 y Enterprise hasta 20, sujetos a los agentes disponibles.
-6. CRUD de configuraciones de cada cuenta: crear, consultar, editar y eliminar.
-7. Solicitud de propuesta con empresa, contacto, sector, objetivo, plan y mensaje; puede asociarse a una configuración propia.
-8. Consulta de solicitudes persistidas desde el espacio de la cuenta.
-9. Flujo ilustrativo de trabajo para explicar la colaboración propuesta entre especialidades.
-10. Diseño responsive, validación y estados de carga, error y resultado vacío.
+Se puede buscar por texto y filtrar por especialidad. Los resultados cambian sin recargar la página. La portada también incluye tres ejemplos de colaboración entre agentes y una sección de planes.
 
-El catálogo inicial tiene seis especialidades. Los máximos de los planes no significan que se entreguen agentes adicionales inexistentes. El precio es ilustrativo y el formulario no genera un pedido ni una transacción.
+### Cuenta de usuario
 
-## 4. Tecnologías y arquitectura
+El registro pide nombre, correo y contraseña. Una vez iniciada la sesión, el usuario puede acceder a sus equipos y solicitudes. Las contraseñas se almacenan mediante un hash.
 
-| Capa | Tecnología | Responsabilidad |
-|---|---|---|
-| Presentación | HTML5 y CSS3 | Catálogo, planes, fichas y formularios responsive |
-| Interacción | JavaScript y DOM | Filtros, selección, orden y flujo ilustrativo |
-| Servidor | PHP 8.2 | Sesiones, validación, permisos, formularios y API |
-| Persistencia | MySQL/MariaDB y PDO | Usuarios, agentes, configuraciones y solicitudes |
+### Configuración de equipos
 
-JavaScript solicita el catálogo mediante Fetch. PHP recibe los filtros en un cuerpo JSON mediante POST, los valida, consulta MySQL y devuelve JSON. GET también está disponible. Las fichas iniciales y los formularios se generan con PHP. Las acciones de guardado son POST con sesión y token CSRF; el servidor vuelve a validar el plan, la selección y la propiedad de los registros.
+El configurador permite indicar un nombre, un objetivo, un sector y un plan, además de seleccionar y ordenar los agentes. Una configuración guardada se puede consultar, editar o eliminar.
 
-`UserRepository` encapsula las cuentas. `BusinessRepository` organiza el catálogo, las configuraciones y las solicitudes. Las clases reciben PDO en el constructor y separan las consultas de las páginas. El código evita frameworks para que su funcionamiento pueda explicarse con los conceptos del curso.
+El plan Básico permite hasta tres agentes, Business hasta diez y Enterprise hasta veinte. El catálogo actual tiene seis agentes distintos, por lo que la selección está limitada también por los disponibles.
 
-## 5. Modelo de datos
+### Solicitudes de propuesta
 
-| Tabla | Contenido | Relación |
-|---|---|---|
-| users | Nombre, correo único, hash y fecha | Titular de configuraciones y solicitudes |
-| agents | Catálogo, especialidad y descripción del servicio propuesto | Participa en configuraciones |
-| configurations | Nombre, objetivo, sector, plan y titular | Agrupa agentes ordenados |
-| configuration_agents | Configuración, agente y posición | Relación muchos a muchos con orden |
-| requests | Empresa, contacto, sector, objetivo, plan, mensaje y configuración opcional | Solicitud asociada a la cuenta |
+El formulario recoge la empresa, el correo de contacto, el sector, el objetivo, el plan y un mensaje. Puede asociarse a un equipo guardado. Las solicitudes quedan almacenadas y se consultan desde la cuenta; el formulario no envía correos ni realiza una contratación.
 
-La selección se conserva en una tabla intermedia con posición. Las claves foráneas mantienen la integridad. Las configuraciones y solicitudes se consultan por el usuario autenticado; conocer un id no concede acceso. El SQL de entrega contiene estructura y catálogo inicial, no los datos de usuarios o empresas de la instalación de desarrollo.
+## Tecnologías utilizadas
 
-## 6. Relación con el enunciado
+| Tecnología | Uso |
+|---|---|
+| HTML5 | Estructura de las páginas, navegación y formularios |
+| CSS3 | Estilos, Grid, Flexbox y adaptación a distintos anchos de pantalla |
+| JavaScript | Eventos, validación, selección y orden de agentes |
+| Fetch y JSON | Comunicación del buscador con el servidor |
+| PHP 8.2 | Sesiones, procesamiento de formularios y consultas a la base de datos |
+| MySQL/MariaDB | Almacenamiento de usuarios, agentes, equipos y solicitudes |
+| PDO | Conexión y consultas preparadas desde PHP |
 
-| Unidad | Peso indicado | Evidencia |
-|---|---|---|
-| UD1 · Idea y contexto | Planificación | Objetivo, perfiles, recorrido y arquitectura de esta documentación |
-| UD2 · HTML y CSS | 20 % | Páginas semánticas, formularios y CSS responsive |
-| UD3 · JavaScript y DOM | 20 % | Eventos, validación, selección, orden y demostración del flujo |
-| UD4 · PHP y MySQL | 25 % | Registro seguro, sesiones, PDO, persistencia y SQL |
-| UD5 · POO | 15 % | UserRepository y BusinessRepository con responsabilidades concretas |
-| UD6 · Responsive y AJAX | 20 % | Media queries, Fetch/JSON y estados de carga/error |
+La aplicación funciona con Apache y MySQL en XAMPP. No utiliza un framework.
 
-Node.js es opcional según el enunciado y no se requiere para ejecutar el servidor. El proyecto usa PHP y MySQL de forma real: configuraciones y solicitudes sobreviven a recargas y cierres de sesión.
+## Organización del código
 
-## 7. Seguridad y validación
+Las páginas principales están en la raíz del proyecto. `index.php` muestra la portada y el catálogo; `agent.php`, la ficha de un agente; `builder.php`, el configurador; y `dashboard.php`, el espacio de la cuenta. El registro y el acceso se encuentran en `register.php` y `login.php`.
 
-- `password_hash()` y `password_verify()` para las credenciales de las cuentas.
-- Consultas preparadas PDO y valores admitidos para planes y categorías.
-- Validación de campos, longitud, correo, selección y límites del plan en PHP.
-- Sesiones con regeneración de id al autenticar, HttpOnly y SameSite.
-- Token CSRF en formularios que modifican estado, incluido el cierre de sesión.
-- Escape HTML en PHP y contenido dinámico insertado como texto en JavaScript.
-- Control de propiedad de configuraciones y solicitudes en el servidor.
-- Confirmación explícita para eliminar configuraciones.
+Los estilos y JavaScript están en `assets/`. Los archivos compartidos de sesión, funciones y estructura de página están en `includes/`, y la conexión a la base de datos, en `config/`.
 
-La instalación está pensada para entrega local. Un despliegue público exigiría HTTPS, usuario de base de datos de privilegios mínimos, control de abuso, copias de seguridad y medidas organizativas para gestionar datos de contacto. No se presentan esas ampliaciones como implementadas.
+La lógica de acceso a datos está separada en dos clases:
 
-## 8. Instalación y ejecución
+- `UserRepository`: busca y crea usuarios.
+- `BusinessRepository`: consulta agentes y gestiona configuraciones y solicitudes.
 
-1. Copiar el proyecto dentro de htdocs de XAMPP.
-2. Iniciar Apache y MySQL.
-3. Importar `database/nexo.sql` en phpMyAdmin. La base se llama `nexo_business`.
-4. Adaptar `config/config.php` o el archivo local a las credenciales de tu equipo. Predeterminado de entrega: 127.0.0.1, puerto 3307 y root sin contraseña.
-5. Abrir la URL localhost correspondiente al nombre real de la carpeta.
-6. Registrar una cuenta, configurar un equipo y enviar una solicitud con datos ficticios de demostración.
+Ambas reciben la conexión PDO en el constructor. Así las páginas pueden utilizar sus métodos sin repetir las consultas SQL.
 
-PHP necesita pdo_mysql y mbstring. No ejecutar con Live Server. Las variables admitidas son NEXO_DSN, NEXO_DB_USER, NEXO_DB_PASS y NEXO_BASE_URL. El archivo `config/local.php` y las variables de entorno no forman parte del ZIP. No se necesita un servicio externo para completar el recorrido.
+El buscador envía los filtros como JSON mediante POST a `api/catalogue.php`. El servidor los valida, consulta la base de datos y devuelve los agentes en JSON. El mismo endpoint admite consultas GET. Los formularios que guardan datos utilizan POST y un token CSRF.
 
-## 9. Verificación
+## Base de datos
 
-Las pruebas HTTP incluidas crean dos cuentas temporales para verificar catálogo, CRUD, permisos, orden, límites del plan, solicitudes y persistencia. Las pruebas JavaScript comprueban las interacciones relevantes del configurador y del flujo ilustrativo. Sus resultados concretos se guardan en `docs/verificacion.md`.
+La base se llama `nexo_business` y contiene cinco tablas:
 
-Las comprobaciones de sintaxis y comportamiento no sustituyen una revisión visual en un navegador real. Los datos ficticios de pruebas se eliminan sin tocar registros ajenos.
+| Tabla | Datos que guarda |
+|---|---|
+| `users` | Nombre, correo, hash de contraseña y fecha de registro |
+| `agents` | Datos de los agentes del catálogo |
+| `configurations` | Nombre, objetivo, sector, plan y usuario propietario del equipo |
+| `configuration_agents` | Agentes de cada equipo y su posición |
+| `requests` | Datos de la solicitud y su relación con la cuenta y el equipo |
 
-## 10. Entrega
+Un usuario puede tener varias configuraciones y cada configuración puede incluir varios agentes. La tabla intermedia `configuration_agents` permite guardar esa relación y mantener el orden elegido.
 
-- **Autor:** Pablo Rodríguez Belenguer.
-- **Asignatura:** Ingeniería Web I.
-- **Repositorio de entrega:** https://github.com/PARODBE/NEXO.
-- **Archivo:** `PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`.
+El archivo `database/nexo.sql` contiene la estructura y los seis agentes iniciales. No contiene cuentas ni solicitudes personales.
 
-El ZIP incluye carpeta raiz Nexo, codigo, SQL, README, documentacion, fuentes, guion y pruebas. Excluye sesiones, credenciales, datos de empresas de prueba y directorios de salida. El estudiante debe enviar el enlace del repositorio al profesor antes de la fecha limite. Los avances semanales deben reflejar trabajo real.
+## Validación y seguridad
 
-## 11. Exportacion SQL y comprobacion de entrega
+Los formularios comprueban los campos obligatorios, el formato del correo y los requisitos de la contraseña. PHP vuelve a validar los datos recibidos y los límites del plan antes de guardarlos.
 
-`database/nexo.sql` es una exportacion real generada con mysqldump de MySQL/MariaDB, con estructura, indices, claves foraneas y seis agentes iniciales. Se genero desde una base temporal limpia para excluir cuentas, configuraciones y solicitudes personales. Se comprobo su importacion en otra base temporal: cinco tablas, seis agentes y cero usuarios. Ambas bases temporales se retiraron tras la comprobacion.
+Las consultas utilizan parámetros preparados. El texto se escapa antes de mostrarlo en HTML y las contraseñas se gestionan con `password_hash()` y `password_verify()`.
 
-La importacion inicial debe hacerse en una instalacion sin tablas previas de NEXO. Si ya utilizas la aplicacion, conserva una copia de tus datos antes de reinstalar: no se debe importar repetidamente sobre una base en uso.
+El servidor comprueba que cada configuración pertenezca a la cuenta conectada. Cambiar un identificador en la dirección no permite acceder a equipos de otra cuenta. Los formularios que modifican datos incluyen protección CSRF y se pide confirmación antes de eliminar un equipo.
 
-La API acepta GET y POST JSON; `docs/api_json.md` explica el intercambio. El registro de comprobaciones figura en `docs/verificacion.md`. El mapa completo del enunciado esta en `docs/cumplimiento_entrega.md`.
+## Instalación y ejecución
+
+1. Instala XAMPP y coloca la carpeta del proyecto en `C:\xampp\htdocs\Nexo`. El archivo `index.php` debe quedar directamente dentro de esa carpeta.
+2. Inicia Apache y MySQL desde el panel de XAMPP.
+3. Abre `http://localhost/phpmyadmin/` e importa `database/nexo.sql`. Este paso solo es necesario en la primera instalación. Si ya existen las tablas de NEXO, no vuelvas a importarlo.
+4. Revisa la conexión en `config/config.php`. Los valores incluidos son servidor `127.0.0.1`, puerto `3307`, base `nexo_business`, usuario `root` y contraseña vacía. Si tu instalación utiliza otro puerto o credenciales, cámbialos.
+5. Abre `http://localhost/Nexo/`. Si cambias el nombre de la carpeta, utiliza ese nombre en la dirección.
+6. Crea una cuenta para guardar equipos y consultar las solicitudes enviadas.
+
+PHP necesita las extensiones `pdo_mysql` y `mbstring`. La web debe abrirse a través de Apache; Live Server no ejecuta el código PHP.
+
+También se puede descargar con Git:
+
+```powershell
+cd C:\xampp\htdocs
+git clone https://github.com/PARODBE/NEXO.git Nexo
+```
+
+Para mantener una configuración local separada, copia `config/local.example.php` como `config/local.php` y completa los datos de conexión. Ese archivo está excluido del repositorio.
+
+Al volver a utilizar la aplicación no hay que repetir la instalación: basta con iniciar Apache y MySQL y abrir la dirección local. Antes de reinstalar sobre una base con datos, conviene exportarla para conservar las cuentas, equipos y solicitudes.
