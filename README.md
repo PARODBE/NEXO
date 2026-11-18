@@ -1,65 +1,89 @@
-# NEXO · Equipos de agentes para empresas
+# NEXO
 
-Aplicación web de catálogo comercial y configuración de equipos de agentes. Una empresa puede explorar especialidades, elegir un plan, preparar una configuración y enviar una solicitud de propuesta. La cuenta permite conservar configuraciones y consultar las solicitudes realizadas.
+Proyecto final de Ingeniería Web I — Pablo Rodríguez Belenguer.
+
+NEXO es una web donde una empresa puede consultar un catálogo de agentes de IA y combinarlos en un equipo según su objetivo. Después de registrarse, puede guardar y editar sus equipos y enviar una solicitud de propuesta.
+
+La web permite configurar los equipos y guardar las solicitudes. Los agentes no se ejecutan y los precios de los planes son ejemplos para el proyecto.
 
 ## Tecnologías
 
-HTML5, CSS3, JavaScript nativo, PHP 8.2 y MySQL/MariaDB mediante PDO. No necesita frameworks ni Node.js para ejecutarse.
+HTML, CSS, JavaScript, PHP 8.2 y MySQL/MariaDB. La conexión con la base de datos utiliza PDO y el buscador del catálogo utiliza Fetch con JSON.
 
-## Clonar el repositorio
+## Cómo ejecutarlo
 
-Con Git instalado, ejecuta en PowerShell:
+Necesitas XAMPP con Apache y MySQL. PHP debe tener activadas las extensiones `pdo_mysql` y `mbstring`.
+
+### 1. Descargar el proyecto
+
+Puedes extraer el ZIP y copiar la carpeta `Nexo` dentro de `C:\xampp\htdocs`, o clonar el repositorio:
 
 ```powershell
 cd C:\xampp\htdocs
 git clone https://github.com/PARODBE/NEXO.git Nexo
-cd Nexo
 ```
 
-Continua con la instalacion desde el inicio de Apache y MySQL. Si ya existe `Nexo`, elige otra carpeta de destino y adapta la URL local.
+Comprueba que el archivo principal está en `C:\xampp\htdocs\Nexo\index.php`, sin otra carpeta `Nexo` intermedia.
 
-## Instalación en XAMPP
+### 2. Preparar la base de datos
 
-1. Copia la carpeta en `C:\xampp\htdocs\Nexo`. Si mantienes otro nombre, utiliza ese nombre en la URL.
-2. Inicia Apache y MySQL.
-3. Importa `database/nexo.sql` desde phpMyAdmin. Se crea la base `nexo_business`, las tablas y el catálogo inicial sin borrar otras bases.
-4. Revisa `config/config.php`. El entorno de entrega utiliza `127.0.0.1`, puerto `3307`, base `nexo_business`, usuario `root` y contraseña vacía. Adapta el puerto y las credenciales a tu instalación.
-5. Abre `http://localhost/Nexo/`, usando el nombre real de tu carpeta.
-6. Registra una cuenta, prepara un equipo y guarda la configuración o envía una solicitud.
+Inicia Apache y MySQL desde XAMPP. Abre `http://localhost/phpmyadmin/` y, en **Importar**, selecciona `database/nexo.sql`.
 
-PHP necesita `pdo_mysql` y `mbstring`. Live Server no ejecuta PHP. Las variables `NEXO_DSN`, `NEXO_DB_USER`, `NEXO_DB_PASS` y `NEXO_BASE_URL` permiten ajustar otro entorno. `config/local.example.php` puede copiarse a `config/local.php` para configurar la base localmente; el archivo local está excluido de Git y del ZIP.
+El archivo crea la base `nexo_business`, sus cinco tablas y los seis agentes del catálogo. No incluye cuentas de usuario.
 
-## Funcionalidades
+**Este paso solo se hace la primera vez.** Si ya tienes las tablas de NEXO, no vuelvas a importar el SQL: aparecerá el error «la tabla ya existe». Para usar la web de nuevo basta con iniciar los servicios.
 
-- Catálogo de especialidades con búsqueda y filtros mediante Fetch/JSON.
-- Fichas de agentes con propósito, entradas, entregables y aplicaciones propuestas.
-- Planes y configurador de equipos con selección y orden de agentes.
-- Registro, inicio y cierre de sesión.
-- Crear, consultar, editar y eliminar configuraciones de la cuenta.
-- Solicitudes de propuesta almacenadas y consultables por su titular.
-- Diseño responsive, validación en cliente y servidor y mensajes de estado.
+### 3. Revisar la conexión
 
-Es un prototipo académico de una web comercial. Los precios y ejemplos de servicios son propuestas ilustrativas; no se procesan pagos ni se contratan servicios al enviar el formulario. La demostración de un flujo describe pasos y entregables previstos, no ejecuta trabajo para una empresa. Los nombres de producto y los ejemplos no representan clientes reales.
+En `config/config.php` están los valores usados en este proyecto:
 
-## Datos y permisos
+| Dato | Valor |
+|---|---|
+| Servidor | `127.0.0.1` |
+| Puerto | `3307` |
+| Base de datos | `nexo_business` |
+| Usuario | `root` |
+| Contraseña | Vacía |
 
-La base contiene usuarios, catálogo, configuraciones, agentes ordenados de cada configuración y solicitudes. Las cuentas solo modifican sus propias configuraciones y consultan sus propias solicitudes. El SQL de entrega no incluye cuentas, datos de empresas o solicitudes personales.
+Si tu MySQL usa el puerto `3306` u otras credenciales, cambia esos valores. También puedes copiar `config/local.example.php` como `config/local.php` y poner allí tu configuración; ese archivo no se sube al repositorio.
 
-## Comprobación y entrega
+### 4. Abrir la web
 
-Con XAMPP activo en un entorno local de pruebas:
+Entra en **http://localhost/Nexo/**. Si has cambiado el nombre de la carpeta, cambia también esa parte de la dirección. No se ejecuta con Live Server: necesita PHP y MySQL.
+
+Para probarla, crea una cuenta, elige un plan, selecciona y ordena los agentes y guarda el equipo. Desde tu cuenta puedes editarlo, eliminarlo y consultar las solicitudes que hayas enviado.
+
+## Qué incluye
+
+- Catálogo con búsqueda, filtros y ficha de cada agente.
+- Planes y configurador de equipos.
+- Registro e inicio de sesión.
+- Equipos guardados con opciones para consultar, editar y eliminar.
+- Formulario de solicitud y consulta de las solicitudes de la cuenta.
+- Diseño adaptable a móvil.
+
+Cada usuario solo puede acceder a sus equipos y solicitudes. Las contraseñas se guardan como hash y las consultas SQL utilizan parámetros preparados.
+
+## Documentación y pruebas
+
+La explicación del proyecto está en [documentacion_proyecto.md](documentacion_proyecto.md). En `docs/` están el guion de presentación, la explicación de la API y los resultados de las comprobaciones.
+
+Con XAMPP iniciado, puedes ejecutar estas pruebas desde la carpeta del proyecto:
 
 ```powershell
 py scripts/test_app.py
 py scripts/test_json.py
 node scripts/check_interactions.cjs
+```
+
+Las pruebas HTTP crean cuentas ficticias y eliminan sus datos al terminar. Python y Node solo se usan para estas comprobaciones; no hacen falta para abrir la web.
+
+Para generar el ZIP de entrega:
+
+```powershell
 py scripts/package_project.py
 ```
 
-Python y Node son herramientas opcionales de comprobación y empaquetado, no dependencias de la aplicación. Las pruebas HTTP crean dos cuentas aleatorias y eliminan únicamente sus datos al terminar. `NEXO_TEST_URL`, `NEXO_TEST_MYSQL`, `NEXO_TEST_DB_PORT` y `NEXO_TEST_DB_USER` permiten ajustar el entorno de pruebas. No se envían correos ni se procesan pagos.
+Se guarda en `output/PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`.
 
-El empaquetador genera `output/PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`, con carpeta raíz `Nexo`, código, SQL y documentación. Excluye sesiones, credenciales, archivos de entorno y el propio output.
-
-Consulta `documentacion_proyecto.md`, `docs/guion_presentacion.md` y `docs/verificacion.md`. Repositorio: [PARODBE/NEXO](https://github.com/PARODBE/NEXO). El estudiante debe enviar el enlace al profesor antes de la fecha limite.
-
-El SQL es una exportacion real con mysqldump de una base limpia, sin datos personales. Importalo para la primera instalacion; si ya existen tablas de NEXO, no lo importes sobre tus datos en uso. Haz una copia de seguridad antes de reinstalar. Consulta `docs/api_json.md` y `docs/cumplimiento_entrega.md`.
+Repositorio: https://github.com/PARODBE/NEXO
