@@ -10,4 +10,4 @@ Duración orientativa: 7-9 minutos.
 6. **Solicitud (1 minuto).** Abrir el formulario con la configuración propia y enviarlo con datos ficticios. Consultar la solicitud en la cuenta y aclarar que no se cobra ni se envía correo.
 7. **Código y entrega (1 minuto).** Mostrar BusinessRepository, consulta preparada, hash de contraseña y CSRF. Enseñar SQL, README, documentación y verificación. Node.js es opcional.
 
-Antes de presentar: iniciar XAMPP, importar nexo.sql, revisar el puerto, completar el grupo y usar datos ficticios. No mostrar contraseñas o credenciales de base de datos.
+Antes de presentar: iniciar XAMPP, importar nexo.sql, revisar el puerto y usar datos ficticios. No mostrar contraseñas o credenciales de base de datos.

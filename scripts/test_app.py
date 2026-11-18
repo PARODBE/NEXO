@@ -45,7 +45,7 @@ try:
     assert not json.loads(guest.request('api/catalogue.php?q=zzznexo-sin-coincidencia'))['agents']
     guest.request('api/catalogue.php?q[]=bad',status=422)
     guest.request('api/catalogue.php?category=bad',status=422)
-    guest.request('api/catalogue.php',{},status=405)
+    guest.request('api/catalogue.php',{},status=415)
     guest.request('actions.php',status=405)
     guest.request('actions.php',{'action':'configuration_delete'},status=403)
     guest.request('agent.php?id='+str(ids[0]))

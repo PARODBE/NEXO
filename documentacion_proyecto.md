@@ -40,7 +40,7 @@ El catálogo inicial tiene seis especialidades. Los máximos de los planes no si
 | Servidor | PHP 8.2 | Sesiones, validación, permisos, formularios y API |
 | Persistencia | MySQL/MariaDB y PDO | Usuarios, agentes, configuraciones y solicitudes |
 
-JavaScript solicita el catálogo mediante Fetch. PHP valida los filtros, consulta MySQL y devuelve JSON. Las fichas iniciales y los formularios se generan con PHP. Las acciones de guardado son POST con sesión y token CSRF; el servidor vuelve a validar el plan, la selección y la propiedad de los registros.
+JavaScript solicita el catálogo mediante Fetch. PHP recibe los filtros en un cuerpo JSON mediante POST, los valida, consulta MySQL y devuelve JSON. GET también está disponible. Las fichas iniciales y los formularios se generan con PHP. Las acciones de guardado son POST con sesión y token CSRF; el servidor vuelve a validar el plan, la selección y la propiedad de los registros.
 
 `UserRepository` encapsula las cuentas. `BusinessRepository` organiza el catálogo, las configuraciones y las solicitudes. Las clases reciben PDO en el constructor y separan las consultas de las páginas. El código evita frameworks para que su funcionamiento pueda explicarse con los conceptos del curso.
 
@@ -101,10 +101,17 @@ Las comprobaciones de sintaxis y comportamiento no sustituyen una revisión visu
 
 ## 10. Entrega
 
-- **Autor indicado en el material recibido:** Pablo Rodríguez Belenguer. Verificar antes de entregar.
+- **Autor:** Pablo Rodríguez Belenguer.
 - **Asignatura:** Ingeniería Web I.
-- **Grupo:** pendiente de completar por el estudiante.
 - **Repositorio de entrega:** https://github.com/PARODBE/NEXO.
 - **Archivo:** `PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`.
 
 El ZIP incluye carpeta raiz Nexo, codigo, SQL, README, documentacion, fuentes, guion y pruebas. Excluye sesiones, credenciales, datos de empresas de prueba y directorios de salida. El estudiante debe enviar el enlace del repositorio al profesor antes de la fecha limite. Los avances semanales deben reflejar trabajo real.
+
+## 11. Exportacion SQL y comprobacion de entrega
+
+`database/nexo.sql` es una exportacion real generada con mysqldump de MySQL/MariaDB, con estructura, indices, claves foraneas y seis agentes iniciales. Se genero desde una base temporal limpia para excluir cuentas, configuraciones y solicitudes personales. Se comprobo su importacion en otra base temporal: cinco tablas, seis agentes y cero usuarios. Ambas bases temporales se retiraron tras la comprobacion.
+
+La importacion inicial debe hacerse en una instalacion sin tablas previas de NEXO. Si ya utilizas la aplicacion, conserva una copia de tus datos antes de reinstalar: no se debe importar repetidamente sobre una base en uso.
+
+La API acepta GET y POST JSON; `docs/api_json.md` explica el intercambio. El registro de comprobaciones figura en `docs/verificacion.md`. El mapa completo del enunciado esta en `docs/cumplimiento_entrega.md`.

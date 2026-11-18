@@ -51,6 +51,7 @@ Con XAMPP activo en un entorno local de pruebas:
 
 ```powershell
 py scripts/test_app.py
+py scripts/test_json.py
 node scripts/check_interactions.cjs
 py scripts/package_project.py
 ```
@@ -59,4 +60,6 @@ Python y Node son herramientas opcionales de comprobación y empaquetado, no dep
 
 El empaquetador genera `output/PabloRodriguezBelenguer_ProyectoFinal_WebApp.zip`, con carpeta raíz `Nexo`, código, SQL y documentación. Excluye sesiones, credenciales, archivos de entorno y el propio output.
 
-Consulta `documentacion_proyecto.md`, `docs/guion_presentacion.md` y `docs/verificacion.md`. Completa el grupo antes de entregar. Repositorio: [PARODBE/NEXO](https://github.com/PARODBE/NEXO). El estudiante debe enviar el enlace al profesor antes de la fecha limite.
+Consulta `documentacion_proyecto.md`, `docs/guion_presentacion.md` y `docs/verificacion.md`. Repositorio: [PARODBE/NEXO](https://github.com/PARODBE/NEXO). El estudiante debe enviar el enlace al profesor antes de la fecha limite.
+
+El SQL es una exportacion real con mysqldump de una base limpia, sin datos personales. Importalo para la primera instalacion; si ya existen tablas de NEXO, no lo importes sobre tus datos en uso. Haz una copia de seguridad antes de reinstalar. Consulta `docs/api_json.md` y `docs/cumplimiento_entrega.md`.
